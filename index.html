@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1.0">
+    <title>Monzo Heatmap</title>
+    <link rel="stylesheet" href="css/styles.css">
+  </head>
+  <body>
+    <h1>Monzo Heatmap</h1>
+    <div>
+      <p>Upload your exported Monzo CSV file:</p>
+      <form class="" action="">
+        <input type="file" name="data" id="fileInput" onchange="processFile(this.files)">
+      </form>
+    </div>
+    <div id="error">
+      <p></p>
+    </div>
+    <div id="map">
+
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.4.0.min.js" integrity="sha256-BJeo0qm959uMBGb65z40ejJYGSgR7REI4+CW1fNKwOg=" crossorigin="anonymous"></script>
+    <script src="js/jquery.csv.min.js" charset="utf-8"></script>
+    <script src="js/index.js" charset="utf-8"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBQ6FKAyMrqCaDfRXpnSV5zb_CyA4jBKaM&libraries=visualization" defer></script>
+  </body>
+</html>
