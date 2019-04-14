@@ -27,12 +27,19 @@ var processFile = function(files) {
     // Parse CSV file
     var csv = event.target.result;
     $.csv.toObjects(csv, {}, function(err, data) {
-      if (err) {
-        alert("Error processing CSV.");
+      if (err || data.length === 0) {
+        $('#error p').text("Error processing CSV file.");
+        $('#error').css('display', 'block');
         return;
       }
 
-      console.log("CSV processed");
+      if (Object.keys(data[0]).indexOf('address') == -1) {
+        $('#error p').text("File doesn't contain address field.");
+        $('#error').css('display', 'block');
+        return;
+      }
+
+      $('#error').css('display', 'none');
 
       // Find entries with addresses
       for (var i = 0; i < data.length; i++) {
@@ -48,7 +55,7 @@ var processFile = function(files) {
       }
 
       var addressStrs = Object.keys(addresses);
-      $.ajax("http://localhost:8000/geocode", {
+      $.ajax("/geocode", {
         data: JSON.stringify(addressStrs),
         contentType: 'application/json',
         type: 'POST',
@@ -56,9 +63,9 @@ var processFile = function(files) {
           if (res.status == 200){
             locations = res.responseJSON;
             drawHeatmap();
-            console.log("Locations populated");
           } else {
-            console.log("Request error.");
+            $('#error p').text("There was an error processing your request.");
+            $('#error').css('display', 'block');
           }
         }
       });
@@ -68,6 +75,8 @@ var processFile = function(files) {
 };
 
 var drawHeatmap = function() {
+  $('#error').css('display', 'none');
+
   var data = Object.keys(locations).map(function(address) {
     var weight = addresses[address];
     var loc = locations[address];
