@@ -14,10 +14,19 @@ $(document).ready(function() {
 });
 
 var processFile = function(files) {
+  var files = document.getElementById('fileInput').files;
+  if (files.length !== 1) {
+    $('#error p').text("Please select a file.");
+    $('#error').css('display', 'block');
+    return;
+  }
+
   var file = files[0];
 
   if (file.type != 'text/csv') {
-    $('#error').html("<p>Please upload a CSV file.</p>");
+    $('#error p').text("Please upload a valid CSV file.");
+    $('#error').css('display', 'block');
+    return;
   }
 
   // Read file buffer as text file

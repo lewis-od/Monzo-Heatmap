@@ -10,8 +10,9 @@
     <h1>Monzo Heatmap</h1>
     <div>
       <p>Upload your exported Monzo CSV file:</p>
-      <form class="" action="">
-        <input type="file" name="data" id="fileInput" onchange="processFile(this.files)">
+      <form class="" action="" onsubmit="return false;">
+        <input type="file" name="data" id="fileInput">
+        <input type="submit" name="submit" onclick="processFile()">
       </form>
     </div>
     <div id="error">
