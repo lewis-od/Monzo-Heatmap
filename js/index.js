@@ -9,9 +9,10 @@ $(document).ready(function() {
   }
   map = new google.maps.Map(document.getElementById('map'), {
             center: {lat: 55, lng: -4.0},
-            zoom: 5
+            zoom: 6,
+            streetViewControl: false,
+            mapTypeId: google.maps.MapTypeId.HYBRID
           });
-  map.setMapTypeId(google.maps.MapTypeId.SATELLITE);
 
   spinner = new Spin.Spinner({color: '#000', lines: 12});
 });
