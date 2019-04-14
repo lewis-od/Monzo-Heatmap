@@ -32,7 +32,12 @@ def geocode():
             stored_lng = cache.get(addr + ':lng')
             output[addr] = { 'lat': float(stored_lat), 'lng': float(stored_lng) }
         else:
-            res = gmaps.geocode(addr)
+            # Bias results to the UK
+            bounds = {
+                'southwest': '49.923465,-6.547706',
+                'northeast': '59.454472, 0.081914'
+            }
+            res = gmaps.geocode(addr, bounds=bounds)
             if len(res) > 0:
                 location = res[0]['geometry']['location']
                 output[addr] = location
