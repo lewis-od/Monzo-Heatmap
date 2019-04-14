@@ -49,6 +49,7 @@ var processFile = function(files) {
       }
 
       $('#error').css('display', 'none');
+      $('#subBtn').prop('disabled', true);
 
       // Find entries with addresses
       for (var i = 0; i < data.length; i++) {
@@ -99,4 +100,6 @@ var drawHeatmap = function() {
     radius: 30
   });
   heatmap.setMap(map);
+
+  $('#subBtn').prop('disabled', false);
 };
