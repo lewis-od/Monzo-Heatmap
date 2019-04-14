@@ -9,8 +9,16 @@
   <body>
     <h1>Monzo Heatmap</h1>
     <div id="main">
-      <p>Upload your exported Monzo CSV file:</p>
-      <form class="" action="" onsubmit="return false;">
+      <p>
+        Export your transactions in the Monzo app in CSV format (bottom of the
+        Summary tab), then upload them here.
+      </p>
+      <p>
+        Note: The heatmap may take a few minutes to load, depending on how
+        many transactions you have. The heatmap also may not be enitrely accurate,
+        due to the fact full addresses aren't always stored with transactions.
+      </p>
+      <form id="uploadForm" action="" onsubmit="return false;">
         <input type="file" name="data" id="fileInput">
         <input type="submit" name="submit" id="subBtn" onclick="processFile()">
       </form>

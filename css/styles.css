@@ -1,8 +1,10 @@
 html, body {
   height: 100%;
-  margin: 0;
-  padding: 0;
   font-family: sans-serif;
+}
+
+#uploadForm {
+  padding: 10px 10px 10px 0;
 }
 
 #map {
