@@ -48,7 +48,7 @@ var processFile = function(files) {
       }
 
       var addressStrs = Object.keys(addresses);
-      $.ajax("http://localhost:5000/geocode", {
+      $.ajax("http://localhost:8000/geocode", {
         data: JSON.stringify(addressStrs),
         contentType: 'application/json',
         type: 'POST',
