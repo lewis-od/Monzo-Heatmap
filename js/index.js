@@ -1,6 +1,7 @@
 var addresses = {};
 var locations = {};
 var map;
+var spinner;
 
 $(document).ready(function() {
   if (!(window.File && window.FileReader && window.FileList && window.Blob)) {
@@ -11,6 +12,8 @@ $(document).ready(function() {
             zoom: 5
           });
   map.setMapTypeId(google.maps.MapTypeId.SATELLITE);
+
+  spinner = new Spin.Spinner({color: '#000', lines: 12});
 });
 
 var processFile = function(files) {
@@ -65,6 +68,7 @@ var processFile = function(files) {
       }
 
       var addressStrs = Object.keys(addresses);
+      spinner.spin(document.getElementById('spinner'));
       $.ajax("/geocode", {
         data: JSON.stringify(addressStrs),
         contentType: 'application/json',
@@ -72,10 +76,12 @@ var processFile = function(files) {
         complete: function(res, status) {
           if (res.status == 200){
             locations = res.responseJSON;
+            spinner.stop();
             drawHeatmap();
           } else {
             $('#error p').text("There was an error processing your request.");
             $('#error').css('display', 'block');
+            spinner.stop();
           }
         }
       });

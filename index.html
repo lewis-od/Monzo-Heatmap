@@ -8,12 +8,14 @@
   </head>
   <body>
     <h1>Monzo Heatmap</h1>
-    <div>
+    <div id="main">
       <p>Upload your exported Monzo CSV file:</p>
       <form class="" action="" onsubmit="return false;">
         <input type="file" name="data" id="fileInput">
         <input type="submit" name="submit" id="subBtn" onclick="processFile()">
       </form>
+      <div id="spinner">
+      </div>
     </div>
     <div id="error">
       <p></p>
@@ -24,6 +26,7 @@
 
     <script src="https://code.jquery.com/jquery-3.4.0.min.js" integrity="sha256-BJeo0qm959uMBGb65z40ejJYGSgR7REI4+CW1fNKwOg=" crossorigin="anonymous"></script>
     <script src="js/jquery.csv.min.js" charset="utf-8"></script>
+    <script src="js/spin.js" charset="utf-8"></script>
     <script src="js/index.js" charset="utf-8"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBQ6FKAyMrqCaDfRXpnSV5zb_CyA4jBKaM&libraries=visualization" defer></script>
   </body>
