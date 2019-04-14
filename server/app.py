@@ -6,7 +6,7 @@ import os
 
 gmaps_key = os.environ.get('GMAPS_KEY', "")
 gmaps = googlemaps.Client(key=gmaps_key)
-cache = redis.Redis(host='localhost', port=6379, db=0)
+cache = redis.from_url(os.environ.get('REDIS_URL'))
 
 bp = Blueprint('app', __name__)
 
