@@ -4,8 +4,12 @@ let map, spinner;
 
 $(document).ready(() => {
   if (!(window.File && window.FileReader && window.FileList && window.Blob)) {
-    alert("Your browser does not support the HTML5 File API.");
+    alert("Your browser does not support the HTML5 File API. This website " 
+      + "will not work. Try using a newer browser.");
+    
+    $('#subBtn').prop('disabled', true);
   }
+
   map = new google.maps.Map(document.getElementById('map'), {
             center: {lat: 55, lng: -4.0},
             zoom: 6,
