@@ -1,5 +1,4 @@
 from flask import Blueprint, request, jsonify, send_from_directory
-from flask_cors import cross_origin
 import googlemaps
 import redis
 import os
