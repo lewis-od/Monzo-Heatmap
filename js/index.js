@@ -19,16 +19,14 @@ $(document).ready(() => {
 function processFile() {
   const files = document.getElementById('fileInput').files;
   if (files.length !== 1) {
-    $('#error p').text("Please select a file.");
-    $('#error').css('display', 'block');
+    showError("Please select a file.");
     return;
   }
 
   const file = files[0];
 
   if (file.type != 'text/csv') {
-    $('#error p').text("Please upload a valid CSV file.");
-    $('#error').css('display', 'block');
+    showError("Please upload a valid CSV file.");
     return;
   }
 
@@ -41,8 +39,7 @@ function processFile() {
     try { // $.csv.toObjects throws TypeErrror if uploaded file is blank
       $.csv.toObjects(csv, {}, function(err, data) {
         if (err || data.length === 0) {
-          $('#error p').text("Error processing CSV file.");
-          $('#error').css('display', 'block');
+          showError("Error processing CSV file.");
           if (err) {
             console.error(error);
           } else {
@@ -52,8 +49,7 @@ function processFile() {
         }
 
         if (Object.keys(data[0]).indexOf('address') == -1) {
-          $('#error p').text("File doesn't contain address field.");
-          $('#error').css('display', 'block');
+          showError("File doesn't contain address field.");
           console.error("No address column found in CSV file.");
           return;
         }
@@ -85,8 +81,7 @@ function processFile() {
               locations = res.responseJSON;
               drawHeatmap();
             } else {
-              $('#error p').text("There was an error processing your request.");
-              $('#error').css('display', 'block');
+              showError("There was an error processing your request.");
               console.error(res.statusText);
             }
             // Reset UI
@@ -96,7 +91,8 @@ function processFile() {
         });
       });
     } catch (e) {
-      console.log("Error processing CSV file.");
+      showError("Error processing CSV file");
+      console.log("Error thrown by $.csv.toObject()");
       console.error(e);
     }
 
@@ -120,3 +116,8 @@ function drawHeatmap() {
   });
   heatmap.setMap(map);
 };
+
+function showError(errorText) {
+  $('#error p').text(errorText);
+  $('#error').css('display', 'block');
+}
