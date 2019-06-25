@@ -28,4 +28,4 @@ export FLASK_ENV=development
 flask run
 ```
 
-Then go to [http://localhost:5000/]().
+Then go to [http://localhost:5000/](http://localhost:5000/).
