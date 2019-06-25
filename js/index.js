@@ -1,9 +1,8 @@
-var addresses = {};
-var locations = {};
-var map;
-var spinner;
+let addresses = {};
+let locations = {};
+let map, spinner;
 
-$(document).ready(function() {
+$(document).ready(() => {
   if (!(window.File && window.FileReader && window.FileList && window.Blob)) {
     alert("Your browser does not support the HTML5 File API.");
   }
@@ -17,15 +16,15 @@ $(document).ready(function() {
   spinner = new Spin.Spinner({color: '#000', lines: 12});
 });
 
-var processFile = function(files) {
-  var files = document.getElementById('fileInput').files;
+function processFile() {
+  const files = document.getElementById('fileInput').files;
   if (files.length !== 1) {
     $('#error p').text("Please select a file.");
     $('#error').css('display', 'block');
     return;
   }
 
-  var file = files[0];
+  const file = files[0];
 
   if (file.type != 'text/csv') {
     $('#error p').text("Please upload a valid CSV file.");
@@ -34,11 +33,11 @@ var processFile = function(files) {
   }
 
   // Read file buffer as text file
-  var reader = new FileReader();
+  const reader = new FileReader();
   reader.readAsText(file);
-  reader.onload = function(event) {
+  reader.onload = event => {
     // Parse CSV file
-    var csv = event.target.result;
+    const csv = event.target.result;
     $.csv.toObjects(csv, {}, function(err, data) {
       if (err || data.length === 0) {
         $('#error p').text("Error processing CSV file.");
@@ -56,8 +55,8 @@ var processFile = function(files) {
       $('#subBtn').prop('disabled', true);
 
       // Find entries with addresses
-      for (var i = 0; i < data.length; i++) {
-        var address = data[i].address.trim();
+      for (let i = 0; i < data.length; i++) {
+        const address = data[i].address.trim();
         if (address) {
           // Store addresses in dict with freq. they appear
           if (addresses[address]) {
@@ -68,13 +67,13 @@ var processFile = function(files) {
         }
       }
 
-      var addressStrs = Object.keys(addresses);
+      const addressStrs = Object.keys(addresses);
       spinner.spin(document.getElementById('spinner'));
       $.ajax("/geocode", {
         data: JSON.stringify(addressStrs),
         contentType: 'application/json',
         type: 'POST',
-        complete: function(res, status) {
+        complete: (res, status) => {
           if (res.status == 200){
             locations = res.responseJSON;
             spinner.stop();
@@ -91,17 +90,17 @@ var processFile = function(files) {
   };
 };
 
-var drawHeatmap = function() {
+function drawHeatmap() {
   $('#error').css('display', 'none');
 
-  var data = Object.keys(locations).map(function(address) {
-    var weight = addresses[address];
-    var loc = locations[address];
-    var latlng = new google.maps.LatLng(loc.lat, loc.lng);
+  const data = Object.keys(locations).map(address => {
+    const weight = addresses[address];
+    const loc = locations[address];
+    const latlng = new google.maps.LatLng(loc.lat, loc.lng);
     return { location: latlng, weight: weight };
   });
 
-  var heatmap = new google.maps.visualization.HeatmapLayer({
+  const heatmap = new google.maps.visualization.HeatmapLayer({
     data: data,
     dissipate: false,
     radius: 30
