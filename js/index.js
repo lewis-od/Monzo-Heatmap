@@ -42,12 +42,18 @@ function processFile() {
       if (err || data.length === 0) {
         $('#error p').text("Error processing CSV file.");
         $('#error').css('display', 'block');
+        if (err) {
+          console.error(error);
+        } else {
+          console.error("No data found in CSV file.");
+        }
         return;
       }
 
       if (Object.keys(data[0]).indexOf('address') == -1) {
         $('#error p').text("File doesn't contain address field.");
         $('#error').css('display', 'block');
+        console.error("No address column found in CSV file.");
         return;
       }
 
@@ -81,6 +87,7 @@ function processFile() {
           } else {
             $('#error p').text("There was an error processing your request.");
             $('#error').css('display', 'block');
+            console.error(res.statusText);
             spinner.stop();
           }
         }
