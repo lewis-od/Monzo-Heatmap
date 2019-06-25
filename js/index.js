@@ -38,61 +38,67 @@ function processFile() {
   reader.onload = event => {
     // Parse CSV file
     const csv = event.target.result;
-    $.csv.toObjects(csv, {}, function(err, data) {
-      if (err || data.length === 0) {
-        $('#error p').text("Error processing CSV file.");
-        $('#error').css('display', 'block');
-        if (err) {
-          console.error(error);
-        } else {
-          console.error("No data found in CSV file.");
-        }
-        return;
-      }
-
-      if (Object.keys(data[0]).indexOf('address') == -1) {
-        $('#error p').text("File doesn't contain address field.");
-        $('#error').css('display', 'block');
-        console.error("No address column found in CSV file.");
-        return;
-      }
-
-      $('#error').css('display', 'none');
-      $('#subBtn').prop('disabled', true);
-
-      // Find entries with addresses
-      for (let i = 0; i < data.length; i++) {
-        const address = data[i].address.trim();
-        if (address) {
-          // Store addresses in dict with freq. they appear
-          if (addresses[address]) {
-            addresses[address] += 1;
+    try { // $.csv.toObjects throws TypeErrror if uploaded file is blank
+      $.csv.toObjects(csv, {}, function(err, data) {
+        if (err || data.length === 0) {
+          $('#error p').text("Error processing CSV file.");
+          $('#error').css('display', 'block');
+          if (err) {
+            console.error(error);
           } else {
-            addresses[address] = 1;
+            console.error("No data found in CSV file.");
+          }
+          return;
+        }
+
+        if (Object.keys(data[0]).indexOf('address') == -1) {
+          $('#error p').text("File doesn't contain address field.");
+          $('#error').css('display', 'block');
+          console.error("No address column found in CSV file.");
+          return;
+        }
+
+        $('#error').css('display', 'none');
+        $('#subBtn').prop('disabled', true);
+
+        // Find entries with addresses
+        for (let i = 0; i < data.length; i++) {
+          const address = data[i].address.trim();
+          if (address) {
+            // Store addresses in dict with freq. they appear
+            if (addresses[address]) {
+              addresses[address] += 1;
+            } else {
+              addresses[address] = 1;
+            }
           }
         }
-      }
 
-      const addressStrs = Object.keys(addresses);
-      spinner.spin(document.getElementById('spinner'));
-      $.ajax("/geocode", {
-        data: JSON.stringify(addressStrs),
-        contentType: 'application/json',
-        type: 'POST',
-        complete: (res, status) => {
-          if (res.status == 200){
-            locations = res.responseJSON;
-            spinner.stop();
-            drawHeatmap();
-          } else {
-            $('#error p').text("There was an error processing your request.");
-            $('#error').css('display', 'block');
-            console.error(res.statusText);
+        const addressStrs = Object.keys(addresses);
+        spinner.spin(document.getElementById('spinner'));
+        $.ajax("/geocode", {
+          data: JSON.stringify(addressStrs),
+          contentType: 'application/json',
+          type: 'POST',
+          complete: (res, status) => {
+            if (res.status == 200){
+              locations = res.responseJSON;
+              drawHeatmap();
+            } else {
+              $('#error p').text("There was an error processing your request.");
+              $('#error').css('display', 'block');
+              console.error(res.statusText);
+            }
+            // Reset UI
+            $('#subBtn').prop('disabled', false);
             spinner.stop();
           }
-        }
+        });
       });
-    });
+    } catch (e) {
+      console.log("Error processing CSV file.");
+      console.error(e);
+    }
 
   };
 };
@@ -113,6 +119,4 @@ function drawHeatmap() {
     radius: 30
   });
   heatmap.setMap(map);
-
-  $('#subBtn').prop('disabled', false);
 };
